@@ -1,7 +1,3 @@
-Sure! Here's an extended version of your README with detailed explanations for each of the four principles of Object-Oriented Programming:
-
----
-
 # TBZ Module M320 - Object Oriented Programming
 
 Miro Board: [Here](https://miro.com/app/board/uXjVLE30rto=/)
@@ -52,5 +48,3 @@ Polymorphism allows objects of different classes to be treated as objects of a c
 - Statische Methoden
 - Scopes
 - Information Hiding
-
----
