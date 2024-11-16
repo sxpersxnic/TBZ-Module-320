@@ -1,4 +1,9 @@
 ### IntelliJ IDEA ###
+.idea
+*/**/.idea
+*/**/*.uml
+./QuizApp.uml
+*/**/QuizApp.uml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
