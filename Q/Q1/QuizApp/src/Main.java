@@ -1,10 +1,11 @@
 public class Main {
     public static void main(String[] args)
     {
-        System.out.println("Hello world!");
 
-        Question question1 = new Question("Sample", "A", "B", "C", "D");
+        Scanner QuestionScanner = new Scanner(new File ("questions.txt"))
+        ArrayList<Question> questionList = new ArrayList<>();
 
-        System.out.println(question1.Question);
+        System.out.println("Willkommen zum Quizgame!");
+
     }
 }
