@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
-        Scanner QuestionScanner = new Scanner (new File("C:\\Users\\trist\\git\\m320\\Q\\Q1\\QuizApp\\src\\questions.txt"));
+        Scanner QuestionScanner = new Scanner (new File("Q\\Q1\\QuizApp\\src\\questions.txt"));
         ArrayList<Question> questionList = new ArrayList<>();
 
         while(QuestionScanner.hasNextLine())
@@ -25,6 +25,8 @@ public class Main {
             System.out.println(q.Answer4);
             System.out.println(q.CorrectAnswer);
         }
+
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 
     }
