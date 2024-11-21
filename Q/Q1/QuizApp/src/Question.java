@@ -4,7 +4,7 @@ public class Question {
     String Answer2;
     String Answer3;
     String Answer4;
-    String CorrectAnswer;
+    int CorrectAnswer;
     public Question(String Question, String Answer1, String Answer2, String Answer3, String Answer4, String CorrectAnswer)
     {
         this.Question = Question;
@@ -12,6 +12,6 @@ public class Question {
         this.Answer2 = Answer2;
         this.Answer3 = Answer3;
         this.Answer4 = Answer4;
-        this.CorrectAnswer = CorrectAnswer;
+        this.CorrectAnswer = Integer.parseInt(CorrectAnswer);
     }
 }
