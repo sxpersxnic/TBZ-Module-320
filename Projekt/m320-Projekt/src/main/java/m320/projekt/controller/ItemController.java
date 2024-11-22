@@ -22,22 +22,24 @@ import static m320.projekt.lib.constants.Controller.*;
 @RequestMapping(ITEM_PATH)
 public class ItemController {
     private final ItemService itemService;
+    private final ItemMapper itemMapper;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, ItemMapper itemMapper) {
         this.itemService = itemService;
+        this.itemMapper = itemMapper;
     }
 
     @GetMapping()
     public ResponseEntity<?> findAll() {
         List<Item> items = itemService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(items.stream().map(ItemMapper::toDTO).toList());
+        return ResponseEntity.status(HttpStatus.OK).body(items.stream().map(itemMapper::toDTO).toList());
     }
 
     @GetMapping(ITEM_GET_PATH)
     public ResponseEntity<?> findById(@PathVariable Integer id) {
         try {
             Item item = itemService.findById(id);
-            ItemResDTO dto = ItemMapper.toDTO(item);
+            ItemResDTO dto = itemMapper.toDTO(item);
             return ResponseEntity.status(HttpStatus.OK).body(dto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -47,9 +49,9 @@ public class ItemController {
     @PostMapping(ITEM_POST_PATH)
     public ResponseEntity<?> create(@Valid @RequestBody ItemReqDTO reqDTO) {
         try {
-            Item newItem = ItemMapper.fromDTO(reqDTO);
+            Item newItem = itemMapper.fromDTO(reqDTO);
             Item savedItem = itemService.create(newItem);
-            ItemResDTO resDTO = ItemMapper.toDTO(savedItem);
+            ItemResDTO resDTO = itemMapper.toDTO(savedItem);
             return ResponseEntity.status(HttpStatus.CREATED).body(resDTO);
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -62,9 +64,9 @@ public class ItemController {
             @RequestBody ItemReqDTO reqDTO
     ) {
         try {
-            Item patchItem = ItemMapper.fromDTO(reqDTO);
+            Item patchItem = itemMapper.fromDTO(reqDTO);
             Item savedItem = itemService.update(patchItem, id);
-            ItemResDTO resDTO = ItemMapper.toDTO(savedItem);
+            ItemResDTO resDTO = itemMapper.toDTO(savedItem);
             return ResponseEntity.status(HttpStatus.OK).body(resDTO);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -76,7 +78,7 @@ public class ItemController {
     @DeleteMapping(ITEM_DELETE_PATH)
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
-            itemService.deleteById(id);
+            itemService.delete(id);
             return ResponseEntity.noContent().build();
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

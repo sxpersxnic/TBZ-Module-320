@@ -2,7 +2,6 @@ package m320.projekt.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import m320.projekt.lib.enums.Message;
 import m320.projekt.model.Role;
 import m320.projekt.payload.dto.request.RoleReqDTO;
 import m320.projekt.payload.dto.response.RoleResDTO;
@@ -24,16 +23,18 @@ import static m320.projekt.lib.constants.Controller.*;
 @RequestMapping(ROLE_PATH)
 public class RoleController {
     public final RoleService roleService;
+    public final RoleMapper roleMapper;
 
-    public RoleController(RoleService roleService) {
+    public RoleController(RoleService roleService, RoleMapper roleMapper) {
         this.roleService = roleService;
+        this.roleMapper = roleMapper;
     }
 
     @GetMapping()
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN', 'SCOPE_MODERATOR')")
     public ResponseEntity<?> findAll() {
         List<Role> roles = roleService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(roles.stream().map(RoleMapper::toDTO).toList());
+        return ResponseEntity.status(HttpStatus.OK).body(roles.stream().map(roleMapper::toDTO).toList());
     }
 
     @GetMapping(ROLE_GET_PATH)
@@ -41,7 +42,7 @@ public class RoleController {
     public ResponseEntity<?> findById(@PathVariable Integer id) {
         try {
             Role role = roleService.findById(id);
-            RoleResDTO dto = RoleMapper.toDTO(role);
+            RoleResDTO dto = roleMapper.toDTO(role);
             return ResponseEntity.status(HttpStatus.OK).body(dto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -52,9 +53,9 @@ public class RoleController {
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody RoleReqDTO reqDTO) {
         try {
-            Role newRole = RoleMapper.fromDTO(reqDTO);
+            Role newRole = roleMapper.fromDTO(reqDTO);
             Role savedRole = roleService.create(newRole);
-            RoleResDTO resDTO = RoleMapper.toDTO(savedRole);
+            RoleResDTO resDTO = roleMapper.toDTO(savedRole);
             return ResponseEntity.status(HttpStatus.CREATED).body(resDTO);
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -68,9 +69,9 @@ public class RoleController {
             @RequestBody RoleReqDTO reqDTO
     ) {
         try {
-            Role patchRole = RoleMapper.fromDTO(reqDTO);
+            Role patchRole = roleMapper.fromDTO(reqDTO);
             Role savedRole = roleService.update(patchRole, id);
-            RoleResDTO resDTO = RoleMapper.toDTO(savedRole);
+            RoleResDTO resDTO = roleMapper.toDTO(savedRole);
             return ResponseEntity.status(HttpStatus.OK).body(resDTO);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -83,7 +84,7 @@ public class RoleController {
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
-            roleService.deleteById(id);
+            roleService.delete(id);
             return ResponseEntity.noContent().build();
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

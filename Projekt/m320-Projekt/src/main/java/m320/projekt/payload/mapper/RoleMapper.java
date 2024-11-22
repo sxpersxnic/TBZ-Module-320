@@ -1,5 +1,7 @@
 package m320.projekt.payload.mapper;
 
+import m320.projekt.lib.annotations.Mapper;
+import m320.projekt.lib.interfaces.CrudMapper;
 import m320.projekt.model.Role;
 import m320.projekt.model.User;
 import m320.projekt.payload.dto.request.RoleReqDTO;
@@ -7,9 +9,11 @@ import m320.projekt.payload.dto.response.RoleResDTO;
 
 import java.util.List;
 
-public class RoleMapper {
+@Mapper
+public class RoleMapper implements CrudMapper<Role, RoleReqDTO, RoleResDTO> {
 
-    public static RoleResDTO toDTO(Role role) {
+    @Override
+    public RoleResDTO toDTO(Role role) {
 
         List<Integer> userIds = role.getUsers().stream().map(User::getId).toList();
 
@@ -17,7 +21,8 @@ public class RoleMapper {
 
     }
 
-    public static Role fromDTO(RoleReqDTO dto) {
+    @Override
+    public Role fromDTO(RoleReqDTO dto) {
         Role role = new Role();
 
         role.setId(dto.getId());

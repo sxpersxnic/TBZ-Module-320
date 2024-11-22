@@ -2,6 +2,7 @@ package m320.projekt.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import m320.projekt.lib.exceptions.UserAlreadyExistsException;
+import m320.projekt.lib.interfaces.AuthenticationService;
 import m320.projekt.lib.jwt.JwtGenerator;
 import m320.projekt.lib.validation.UserValidator;
 import m320.projekt.model.User;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class AuthService {
+public class AuthService implements AuthenticationService<SignUpReqDTO, SignUpResDTO, SignInReqDTO, SignInResDTO> {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final SignInMapper signInMapper;

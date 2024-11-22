@@ -1,17 +1,22 @@
 package m320.projekt.payload.mapper;
 
+import m320.projekt.lib.annotations.Mapper;
+import m320.projekt.lib.interfaces.CrudMapper;
 import m320.projekt.model.Item;
 import m320.projekt.model.User;
 import m320.projekt.payload.dto.request.ItemReqDTO;
 import m320.projekt.payload.dto.response.ItemResDTO;
 
-public class ItemMapper {
+@Mapper
+public class ItemMapper implements CrudMapper<Item, ItemReqDTO, ItemResDTO> {
 
-    public static ItemResDTO toDTO(Item src) {
+    @Override
+    public ItemResDTO toDTO(Item src) {
         return new ItemResDTO(src.getId(), src.getTitle(), src.getAuthor().getId());
     }
 
-    public static Item fromDTO(ItemReqDTO dto) {
+    @Override
+    public Item fromDTO(ItemReqDTO dto) {
         Item item = new Item();
         User author = new User();
 
@@ -23,5 +28,4 @@ public class ItemMapper {
 
         return item;
     }
-
 }

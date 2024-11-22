@@ -3,7 +3,6 @@ package m320.projekt.repository;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 import m320.projekt.model.Item;
-import m320.projekt.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;

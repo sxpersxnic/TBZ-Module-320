@@ -16,5 +16,5 @@ public class UserReqDTO {
     private String username;
     private String email;
     private List<Integer> itemIds;
-    private Role role;
+    private Integer roleId;
 }

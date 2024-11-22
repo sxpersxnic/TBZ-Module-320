@@ -4,6 +4,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import m320.projekt.lib.exceptions.FailedValidationException;
+import m320.projekt.lib.interfaces.CrudService;
 import m320.projekt.model.Item;
 import m320.projekt.repository.ItemRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ItemService {
+public class ItemService implements CrudService<Item, Integer> {
 
     private final ItemRepository itemRepository;
 
@@ -39,14 +40,14 @@ public class ItemService {
         return itemRepository.findByAuthorId(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public void deleteById(Integer id) {
+    public void delete(Integer id) {
         itemRepository.deleteById(id);
     }
 
     @Transactional
     public Item update(Item changing, Integer id) {
         Item existing = findByIdForUpdate(id);
-        mergeItems(existing, changing);
+        merge(existing, changing);
         return itemRepository.save(existing);
     }
 
@@ -54,7 +55,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    private void mergeItems(Item existing, Item changing) {
+    public void merge(Item existing, Item changing) {
         Map<String, List<String>> errors = new HashMap<>();
 
         if (changing.getTitle() != null) {

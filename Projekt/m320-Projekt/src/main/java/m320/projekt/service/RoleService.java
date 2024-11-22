@@ -3,6 +3,7 @@ package m320.projekt.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import m320.projekt.lib.exceptions.FailedValidationException;
+import m320.projekt.lib.interfaces.CrudService;
 import m320.projekt.model.Role;
 import m320.projekt.repository.RoleRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RoleService {
+public class RoleService implements CrudService<Role, Integer> {
     private final RoleRepository roleRepository;
 
     public RoleService(RoleRepository roleRepository) {
@@ -36,7 +37,7 @@ public class RoleService {
     @Transactional
     public Role update(Role changing, Integer id) {
         Role existing = findByIdForUpdate(id);
-        mergeRoles(existing, changing);
+        merge(existing, changing);
         return roleRepository.save(existing);
     }
 
@@ -44,7 +45,7 @@ public class RoleService {
         return roleRepository.existsByName(name);
     }
 
-    public void deleteById(Integer id) {
+    public void delete(Integer id) {
         roleRepository.deleteById(id);
     }
 
@@ -52,7 +53,7 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    private void mergeRoles(Role existing, Role changing) {
+    public void merge(Role existing, Role changing) {
         Map<String, List<String>> errors = new HashMap<>();
 
         if (changing.getName() != null) {
